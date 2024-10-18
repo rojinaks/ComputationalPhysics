@@ -82,13 +82,13 @@ for _ in range(X):
     x21 = np.random.uniform(-1, 1, size=P)
     y21 = np.random.uniform(-1, 1, size=P)
 
-    # Berechne den Radiusquadrat
+
     rad2 = x21 ** 2 + y21 ** 2
 
-    # Berechne den Indikator für den Kreis (True = 1, False = 0)
+
     kreis3 = (rad2 <= 1)
 
-    # Multipliziere den Anteil der Punkte im Kreis mit 4, um eine Schätzung für π zu erhalten
+
     pi_mean3 = 4 * np.mean(kreis3)
 
     pi_values.append(pi_mean3)
@@ -99,7 +99,7 @@ pi_std3 = np.std(pi_values)
 
 print(f'π={np.mean(pi_wert)} ± {pi_std3}')
 
-# Histogramm der π-Schätzungen
+
 plt.hist(pi_wert, bins=25)
 plt.axvline(np.pi, color='black', zorder=1, linestyle=':')
 plt.axvspan(np.mean(pi_wert) - pi_std3, np.mean(pi_wert) + pi_std3, alpha=0.25)
