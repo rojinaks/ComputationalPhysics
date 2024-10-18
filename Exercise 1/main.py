@@ -91,10 +91,10 @@ for _ in range(X):
 
     pi_mean3 = 4 * np.mean(kreis3)
 
-    pi_values.append(pi_mean3)
+    pi_wert.append(pi_mean3)
 
-pi_wert = np.array(pi_values)
-pi_std3 = np.std(pi_values)
+pi_wert = np.array(pi_wert)
+pi_std3 = np.std(pi_wert)
 
 
 print(f'π={np.mean(pi_wert)} ± {pi_std3}')
