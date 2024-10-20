@@ -25,9 +25,9 @@ print(f'π = {np.mean(pi_values)} ± {pi_std}')
 plt.hist(pi_values, bins=25, alpha=0.75, edgecolor='black')
 plt.axvline(np.pi, color='black', linestyle=':', label='')
 plt.legend()
-plt.xlabel('')
-plt.ylabel('')
-plt.title('')
+plt.xlabel(' ')
+plt.ylabel(' ')
+plt.title(' ')
 plt.show()
 
 # Plot for the radius
