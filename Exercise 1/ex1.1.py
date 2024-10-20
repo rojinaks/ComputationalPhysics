@@ -34,7 +34,7 @@ plt.show()
 r = np.sqrt(rad2)
 plt.hist(r, bins=25, edgecolor='black')
 plt.xlabel('Radius')
-plt.ylabel('')
+plt.ylabel(' ')
 plt.title('')
 plt.show()
 
