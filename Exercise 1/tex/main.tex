@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{requirements}
+
+\author{Gabriel Remiszewki \\ Rojin Aksu}
+\date{$25^{\mathrm{th}}$ October 2024}
+\title{Independent Trials and Trial Size \\ \large Computational Physics Exercise 1}
+
+\begin{document}
+    \maketitle
+
+    In this paper a stochastic method for computing $\pi$ is introduced and analyzed.
+    The Idea is that the area of the unit circle is given by $\pi$ and the area of a square 
+    with a width of $2$ is $4$. Using this it is possible to calculate $\pi$ by generating 
+    $P$ two-dimensional points (from a uniform distribution) inside the square and counting how many of them also 
+    are located inside the unit circle.\par
+    The points are labeled $\vec r_p = (x_p, y_p)$ with $\vec r_p \in [-1, 1]\times [-1 ,1]$.
+    By using the Iverson Bracket 
+    \[
+        [P] = \begin{cases}
+           1 & \text{if P is true}\\
+           0 & \mathrm{otherwise} 
+        \end{cases}
+    \]
+    We can write the formula for $\pi_x$, where the $x$ stands for the experiment, as 
+    \begin{equation}
+        \pi_X = \frac{4}{P}\sum_{p = 1}^P [x_p^2 + y_p^2 \leq 1].
+        \label{eq:pi} 
+    \end{equation}
+    The experiment can be repeated $X$ times, so that we get a final answer 
+    \begin{equation}
+        \pi_\mathrm f = \frac{1}{X}\sum_{x = 1}^X \pi_x \qquad 
+        \Delta \pi_\mathrm f = \sqrt{\frac{1}{X-1}\sum_{x=1}^X (\pi_\mathrm f - \pi_x)^2}.
+        \label{eq:pi_final}
+    \end{equation}
+    
+
+\end{document}
