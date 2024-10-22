@@ -7,7 +7,6 @@ import main
 P = 10_000  # Number of points
 
 x, y = np.random.uniform(-1, 1, size=(2, P))  # Generate x and y simultaneously
-print(x, y)
 radius_squared = x ** 2 + y ** 2
 circle = radius_squared <= 1  # Points inside the circle
 
@@ -38,9 +37,10 @@ plt.hist(4 * circle, bins=25, alpha=0.75, edgecolor='black', zorder=100)
 plt.axvline(pi, color='red', linestyle='--', label=r'calculated $\pi$ Value')
 plt.axvline(np.pi, color='black', linestyle=':', label=r'true $\pi$ Value')
 plt.axvspan(pi - pi_std, pi + pi_std, alpha=0.25, color='blue', zorder=0,
-            label=r'mean $\pm$ std dev')
+            label=r'$1\sigma$-interval')
 plt.legend()
-plt.xlabel('$4[x^2 + y^2 \leq 1]$')
+plt.xlabel(r'$4[x^2 + y^2 \leq 1]$')
 plt.ylabel("Value Count")
 plt.savefig(main.FIGS_DIR/"ex1.1_indicator_hist.pdf")
 plt.show()
+
