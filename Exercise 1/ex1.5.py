@@ -43,7 +43,7 @@ for i in range(4):
     ax[i].set_title(f"$P = {int(uncertainties[4 * i][0])}$")
     ax[i].set_yscale("log")
     ax[i].set_xscale("log")
-fig.savefig("1.5_uncertainty_function_of_x.pdf")
+fig.savefig(main.FIGS_DIR/"1.5_uncertainty_function_of_x.pdf")
 
 # uncertainties as a function of P and constant X
 fig, ax = plt.subplots(1, 4, figsize=(20, 4))
@@ -56,6 +56,6 @@ for i in range(4):
     ax[i].set_title(f"$X = {int(data[0, 1])}$")
     ax[i].set_yscale("log")
     ax[i].set_xscale("log")
-fig.savefig("1.5_uncertainty_function_of_p.pdf")
+fig.savefig(main.FIGS_DIR/"1.5_uncertainty_function_of_p.pdf")
 
 plt.show()

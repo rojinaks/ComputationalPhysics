@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pathlib
 import typing
+
+
+FIGS_DIR = pathlib.Path(__file__).parent.resolve() / "tex/figs"
+plt.style.use("../custom.matplotlibrc")
 
 
 def generate_points(pairs: int, experiments: int = 1) -> np.array:
