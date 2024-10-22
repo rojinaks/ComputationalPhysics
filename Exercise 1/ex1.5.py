@@ -1,3 +1,4 @@
+#%% Generate Data
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 import numpy as np
@@ -12,9 +13,9 @@ def generate_hist(pairs: int, experiments: int, ax: Axes) -> float:
     pi_std = pi.std()
 
     ax.hist(pi)
-    ax.axvline(pi_mean, color='r')
-    ax.axvline(pi_mean + pi_std, color='r', linestyle="--")
-    ax.axvline(pi_mean - pi_std, color='r', linestyle="--")
+    ax.axvline(pi_mean, color='blue', linestyle=":")
+    ax.axvline(np.pi, color="black", linestyle="--")
+    ax.axvspan(pi_mean - pi_std, pi_mean + pi_std, alpha=0.3, color="blue", zorder=0)
     ax.set_title(f"$P = {pairs}$ $X = {experiments}$")
 
     return pi_std
@@ -35,7 +36,7 @@ for i, pairs in enumerate(x):
 # Third row = uncertainties
 uncertainties = np.array(uncertainties)
 
-# uncertainties as a function of X and constant P
+#%% uncertainties as a function of X and constant P
 fig, ax = plt.subplots(1, 4, figsize=(20, 4))
 for i in range(4):
     data = uncertainties[4 * i: 4 * (i + 1)]
@@ -44,8 +45,9 @@ for i in range(4):
     ax[i].set_yscale("log")
     ax[i].set_xscale("log")
 fig.savefig(main.FIGS_DIR/"1.5_uncertainty_function_of_x.pdf")
+plt.show()
 
-# uncertainties as a function of P and constant X
+#%% uncertainties as a function of P and constant X
 fig, ax = plt.subplots(1, 4, figsize=(20, 4))
 for i in range(4):
     indices = [False, False, False, False]
@@ -57,5 +59,4 @@ for i in range(4):
     ax[i].set_yscale("log")
     ax[i].set_xscale("log")
 fig.savefig(main.FIGS_DIR/"1.5_uncertainty_function_of_p.pdf")
-
 plt.show()

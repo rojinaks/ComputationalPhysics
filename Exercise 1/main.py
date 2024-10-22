@@ -5,7 +5,11 @@ import typing
 
 
 FIGS_DIR = pathlib.Path(__file__).parent.resolve() / "tex/figs"
-plt.style.use("../custom.matplotlibrc")
+print("Hello")
+try:
+    plt.style.use("../custom.matplotlibrc")
+except:
+    pass
 
 
 def generate_points(pairs: int, experiments: int = 1) -> np.array:
@@ -29,6 +33,3 @@ def calculate_pi(**kwargs) -> np.array:
         radii = (kwargs.get("points") ** 2).sum(axis=0)
     inside_the_circle = (radii <= 1)
     return 4 * inside_the_circle.sum(axis=0) / len(radii)
-
-
-
