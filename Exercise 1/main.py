@@ -5,7 +5,7 @@ import typing
 
 
 FIGS_DIR = pathlib.Path(__file__).parent.resolve() / "tex/figs"
-print("Hello")
+TABLES_DIR = pathlib.Path(__file__).parent.resolve() / "tex/tables"
 try:
     plt.style.use("../custom.matplotlibrc")
 except:
