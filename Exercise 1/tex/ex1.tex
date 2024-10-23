@@ -2,9 +2,10 @@
 Let $P = \num{10000}$ and $X = 1$. Since only one experiment is done,
 \cref{eq:pi_final} cannot be used to calculate the uncertainty. Because of that
 the uncertainty is defined as
-\begin{equation*}
-	\Delta \pi_x = 4\sqrt{\text{Var}([X^2 + Y^2 \leq 1])}
-\end{equation*}
+\begin{equation}
+	\Delta \pi_x = \sqrt{\text{Var}(4[X^2 + Y^2 \leq 1])}
+    \label{eq:uncertainty_for_one_x}
+\end{equation}
 with $\text{Var}(X)$ being the variance of the random variable $X$.
 Letting the experiment run results in a value of
 \begin{equation}

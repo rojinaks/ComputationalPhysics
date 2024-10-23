@@ -34,6 +34,21 @@ for i, pairs in enumerate(x):
     for j, experiments in enumerate(x):
         pi, std = generate_hist(pairs, experiments, ax[i, j])
         pi_values[f"{pairs}_{experiments}"] = (pi, std)
+
+# get the extremal limits
+x_min = np.inf
+x_max = -np.inf
+for i in range(4):
+    for j in range(4):
+        limits = ax[i, j].get_xlim()
+        x_min = min(x_min, limits[0])
+        x_max = max(x_max, limits[1])
+
+# set for comparison the same x_limits for all hists
+for i in range(4):
+    for j in range(4):
+        ax[i, j].set_xlim(x_min, x_max)
+
 plt.savefig(main.FIGS_DIR / "ex1.5_px_combinations.pdf")
 plt.show()
 
@@ -67,7 +82,7 @@ for ax_index, i in enumerate(x):
     data = pi_df.query(f"P == {i}")["std"]
     x_axis = data.index.get_level_values("X")
     y_axis = data.to_numpy()
-    ax[ax_index].scatter(x_axis, y_axis)
+    ax[ax_index].scatter(x_axis, y_axis, s=60)
     ax[ax_index].set_title(f"$P = {i}$")
     ax[ax_index].set_yscale("log")
     ax[ax_index].set_xscale("log")
@@ -84,7 +99,7 @@ for ax_index, i in enumerate(x):
     x_axis = data.index.get_level_values("P")
     y_axis = data.to_numpy()
     ax[ax_index].set_xlabel(r"$P$")
-    ax[ax_index].scatter(x_axis, y_axis)
+    ax[ax_index].scatter(x_axis, y_axis, s=60)
     ax[ax_index].set_title(f"$X = {i}$")
     ax[ax_index].set_yscale("log")
     ax[ax_index].set_xscale("log")
