@@ -1,24 +1,45 @@
-\section{some}\label{sec:3}
+\section{Uncertainty Dependency of $X$ and $P$}\label{sec:3}
+Now we focus on how the uncertainty changes as a function of $X$ and $P$. 
+The $\pi$ values were calculated for 16 different combinations of point- and 
+experiment count. The results are shown in \cref{tab:ex1.5_pi_values} with 
+the corresponding histograms for the $\pi_x$ distributions. 
+It is easy to see that for a constant $P$ the uncertainty does not 
+change with higher $X$ which is surprising, because it means that for a 
+given number of generated points the $\pi$ value cannot be made 
+more precise with higher experiment count. The uncertainties for every 
+$P$ are shown in \cref{fig:uncertainty_function_of_x}. On the other hand 
+are correlation between the uncertainty and $P$ for constant $X$ 
+is visible. For the log-log plot in \cref{fig:uncertainty_function_of_p} a linear 
+function would be a good approximation and thus we can write 
+$$ \log \text{err}(P) = -n\log P + b$$
+with $b, n > 0$. This results in the relation 
+$$\text{err}(P) = \frac{\mathrm{e}^b}{P^n}$$
+for the uncertainty. This function will not be fitted to the data but from visual
+inspections it is clear that the same relation with same parameters $b$ and $n$ 
+will hold for every $X$. \par 
+With this information we can conclude that the most efficient way to calculate 
+$pi$ with a given $PX$ is to maximize $P$ and keep $X$ small, although From 
+\cref{sec:1} it is known that $X$ has to be atleast bigger than $1$.
 
 \input{tables/ex1.5_table.tex}
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=1\linewidth]{figs/ex1.5_px_combinations.pdf}
-    \caption{}
-    \label{}
+    \caption{$\pi_x$ distributions for different combinations of $P$ and $X$.}
+    \label{fig:px_combinations}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\linewidth]{figs/1.5_uncertainty_function_of_x.pdf}
     \caption{}
-    \label{}
+    \label{fig:uncertainty_function_of_x}
 \end{figure}
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\linewidth]{figs/1.5_uncertainty_function_of_p.pdf}
     \caption{}
-    \label{}
+    \label{fig:uncertainty_function_of_p}
 \end{figure}
