@@ -17,12 +17,26 @@ When doing just one experiment, the distribution of the generated points is
 of interest. For this the histogram of the radii $R = \sqrt{X^2 + Y^2}$
 and the squared radii are plotted in \cref{fig:radii_hist,fig:radii_squared_hist}.
 For the radii we can see a linear rising distribution with a maximum at $r=1$, after which 
-the distribution drops. This drop is also visible for the squared radii, but 
-in the region $[0,1]$ a constant distribution is visible. The drop after 
-$r=1$ is easily explainable with the fact that points insied a $2\times 2$ square
-we generated and a circle with radius $1$ is the biggest circle that fits inside.
-Whith this in mind the amount of points generated on the circumference of a 
-circle with bigger radius has to get smaller.
+the distribution drops. 
+The linear rise is explainable with the following argumentation:\\
+The points generated inside the square are distributed uniformly, but since 
+the circumference of a circle is proportional to the radius, the point density $n(r)$
+also has to be $n(r)\sim  r$. The drop after $r = 1$ occurs because 
+a circle with radius $1$ is the biggest that fits inside a $2\times 2$ 
+square, so there will be fewer points that can be generated with that radius.\par 
+For the $R^2$ distribution a constant distribution up until $r=1$ is visible.
+This can be easily calculated. For two random variables $X, Y$ and 
+a function $V: X \rightarrow Y$ and given distribution $n(x)$, the distribution of 
+$Y$ can be calculated with the delta distribution $\delta(x)$ by 
+\[
+    p(y) = \int dx\, n(x) \delta(y - V(x)).
+\] 
+For the variable $\rho = r^2$ we get 
+\begin{align*}
+    p(\rho) &= \text{const}\cdot\int_0^1 dr\, r\cdot\delta(r^2 - \rho)
+     = \text{const}\cdot\int_0^1 dr\, r \cdot \frac{\delta(r - \sqrt\rho)}{2\sqrt\rho}\\
+     &= \text{const }
+\end{align*}
 \textbf{TO BE CONTINUED}
 
 

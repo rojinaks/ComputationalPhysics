@@ -15,10 +15,10 @@ def generate_hist(pairs: int, experiments: int, ax: Axes) -> typing.Tuple[float,
     pi_mean = pi.mean()
     pi_std = pi.std()
 
-    ax.hist(pi)
-    ax.axvline(pi_mean, color='blue', linestyle=":")
-    ax.axvline(np.pi, color="black", linestyle="--")
-    ax.axvspan(pi_mean - pi_std, pi_mean + pi_std, alpha=0.3, color="blue", zorder=0)
+    ax.hist(pi, label=r"$\pi_x$ distribution")
+    ax.axvline(pi_mean, color='blue', linestyle=":", label=r"$\pi_\text{f}$")
+    ax.axvline(np.pi, color="black", linestyle="--", label=r"true $\pi$ value")
+    ax.axvspan(pi_mean - pi_std, pi_mean + pi_std, alpha=0.3, color="blue", zorder=0, label="uncertainty")
     ax.set_title(f"$P = {pairs}$ $X = {experiments}$")
 
     return pi_mean, pi_std
@@ -49,6 +49,9 @@ for i in range(4):
     for j in range(4):
         ax[i, j].set_xlim(x_min, x_max)
 
+handles, labels = ax[0, 0].get_legend_handles_labels()
+plt.legend(handles, labels, loc="upper right", frameon=True, bbox_to_anchor=(1.55, 4.5))
+plt.tight_layout()
 plt.savefig(main.FIGS_DIR / "ex1.5_px_combinations.pdf")
 plt.show()
 
@@ -66,7 +69,7 @@ pi_df = pd.DataFrame({
 data_matrix = pi_df["Pi"].unstack(level="P")
 styler = data_matrix.style
 with open(main.TABLES_DIR / "ex1.5_table.tex", "w") as f:
-    f.write(r"%$X \text\textbackslash P$ & 10 & 100 & 1000 & 10000 \\")
+    f.write(r"%$X \text\textbackslash P$ & 10 & 100 & 1000 & 10000 \\" + "\n")
     caption = r"""
     Calcuated $\pi$ values for different $P$ and $X$.
     """
