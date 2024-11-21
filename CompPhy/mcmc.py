@@ -67,42 +67,42 @@ class Ising2D:
 
         return -self.h * config.sum()
 
-    def _calc_action_change(self, config: SpinConfig, position: typing.Tuple[int, int]):
+    def _calc_action_change(self, config: SpinConfig, x: int, y: int):
         N = self.lattice_sites
 
-        return (
-            2
-            * self.J
-            * config[*position]
-            * (
-                config[(position[0] + 1) % N, position[1]]
-                + config[(position[0] - 1) % N, position[1]]
-                + config[position[0], (position[1] + 1) % N]
-                + config[position[0], (position[1] - 1) % N]
-            )
+        neighbours = (
+            config[(x + 1) % N, y]
+            + config[(x - 1) % N, y]
+            + config[x, (y + 1) % N]
+            + config[x, (y - 1) % N]
         )
+
+        return 2 * self.J * config[x, y] * neighbours
 
     def _make_proposal(self, config: SpinConfig) -> SpinConfig:
 
-        z = np.random.randint(low=0, high=self.lattice_sites, size=2)
+        x, y = np.random.randint(low=0, high=self.lattice_sites, size=2)
 
-        # Tuple not necessary but mypy
-        a = min(1, self._calc_action_change(config, tuple(z)))
+        a = min(1, np.exp(-self._calc_action_change(config, x, y)))
         u = np.random.uniform(0, 1)
 
         new_config = deepcopy(config)
         if a >= u:
-            new_config[*z] *= -1
+            new_config[x, y] *= -1
 
         return new_config
 
-    def __call__(self, number_of_configs: int, starting_config: typing.Optional[SpinConfig] = None):
+    def __call__(
+        self,
+        number_of_configs: int,
+        starting_config: typing.Optional[SpinConfig] = None,
+    ):
         # Generate a random starting position if not specified
         if starting_config is None:
             starting_config = self.generate_spin_config()
 
         configurations = [starting_config]
-        for _ in range(number_of_configs - 1):
+        for i in range(number_of_configs - 1):
             configurations.append(self._make_proposal(configurations[-1]))
 
         return np.array(configurations)
