@@ -34,7 +34,7 @@ class Ising2D:
             size=(self.lattice_sites, self.lattice_sites),
         )
 
-    def _calc_h(self, config: SpinConfig) -> np.float64:
+    def _calc_h(self, config: SpinConfig) -> NDArray[np.float64]:
         """
 
         Calculate the Term
@@ -44,10 +44,18 @@ class Ising2D:
 
         """
 
-        term1 = (config * np.roll(config, shift=1, axis=1)).sum()
-        term2 = (config * np.roll(config, shift=1, axis=0)).sum()
+        # Make Case for one config or multiple configs
+        if config.ndim == 2:
+            term1 = (config * np.roll(config, shift=1, axis=0)).sum()
+            term2 = (config * np.roll(config, shift=1, axis=1)).sum()
 
-        return -self.J * (term1 + term2)
+            return -self.J * (term1 + term2)
+
+        else:
+            term1 = (config * np.roll(config, shift=1, axis=1)).sum(axis=(1, 2))
+            term2 = (config * np.roll(config, shift=1, axis=2)).sum(axis=(1, 2))
+
+            return -self.J * (term1 + term2)
 
     def _calc_m(self, config: SpinConfig) -> np.float64:
         """
@@ -89,14 +97,12 @@ class Ising2D:
         return new_config
 
     def __call__(self, number_of_configs: int, starting_config: typing.Optional[SpinConfig] = None):
- 
         # Generate a random starting position if not specified
         if starting_config is None:
             starting_config = self.generate_spin_config()
-              
+
         configurations = [starting_config]
         for _ in range(number_of_configs - 1):
             configurations.append(self._make_proposal(configurations[-1]))
 
         return np.array(configurations)
-
