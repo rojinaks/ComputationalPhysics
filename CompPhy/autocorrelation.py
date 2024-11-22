@@ -1,9 +1,7 @@
 import numpy as np
 
 
-def normalized_autocorrelation(
-    time_series: np.ndarray, mean: float | None = None
-) -> np.ndarray:
+def normalized_autocorrelation(time_series: np.ndarray, mean: float | None = None) -> np.ndarray:
 
     if mean is None:
         mean = time_series.mean()
@@ -37,3 +35,17 @@ def integrated_autocorrelation(time_series: np.ndarray, mean: float | None = Non
         return 0.5 + C[1:first_zero].sum()
     except:
         return len(C)  # at least!
+
+
+def blocking(time_series: np.ndarray, mean: float | None = None, tau: float | None = None):
+    if tau is None:
+        tau = int(np.ceil(integrated_autocorrelation(time_series, mean)))
+
+    n = len(time_series) // tau
+
+    blocked = np.zeros(n)
+
+    for b in range(n):
+        blocked[b] = time_series[b * tau : (b + 1) * tau].mean()
+
+    return blocked
