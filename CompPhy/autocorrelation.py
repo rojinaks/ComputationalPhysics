@@ -49,3 +49,6 @@ def blocking(time_series: np.ndarray, mean: float | None = None, tau: float | No
         blocked[b] = time_series[b * tau : (b + 1) * tau].mean()
 
     return blocked
+
+
+__all__ = ["normalized_autocorrelation", "integrated_autocorrelation", "blocking"]

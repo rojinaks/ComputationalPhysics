@@ -15,8 +15,20 @@ class SpinSystem(abc.ABC):
 
     """
 
-    shape: tuple
-    """Tuple of dimension count of the system and lattice sites per dimension"""
+    DIM: int
+    N: int
+
+    def __init__(self):
+        self.indexing = self.generate_indexing()
+
+    @property
+    def shape(self) -> tuple:
+        """Shape of a spin configuration"""
+        return tuple([self.N] * self.DIM)
+
+    @property
+    def lattice_site_count(self):
+        return pow(self.N, self.DIM)
 
     @abc.abstractmethod
     def action_change(self, cfg: NDArray[np.int8], x: typing.Any) -> float:
@@ -29,13 +41,73 @@ class SpinSystem(abc.ABC):
         pass
 
     def generate_cfg(self) -> NDArray[np.int8]:
-        return np.random.choice(np.array([-1, 1], dtype=np.int8), size=self.shape).flatten()
+        """Generate a randomized spin configuration."""
+        x = np.random.choice(np.array([-1, 1], dtype=np.int8), size=self.shape)
+        return x
 
     def generate_spinup_cfg(self):
-        return np.ones(self.shape, dtype=np.int8).flatten()
+        """Generate a spin up configuration."""
+        return np.ones(self.shape, dtype=np.int8)
 
     def generate_spindown_cfg(self):
-        return np.ones(self.shape, dtype=np.int8).flatten() * (-1)
+        """Generate a spin down configuration."""
+        return np.ones(self.shape, dtype=np.int8) * (-1)
+
+    def generate_indexing(self) -> NDArray[np.int64]:
+        """Generate an array if the indices of all lattice sites."""
+
+        DIM = self.DIM
+        N = self.N
+        x = np.zeros(shape=(*[N] * DIM, DIM), dtype=np.int64)
+        X = np.arange(0, N, 1)
+
+        def fill(x, dim, index=[]):
+            for i in X:
+                temp_index = [*index, i]
+                if dim == 1:
+                    x[*temp_index] = temp_index
+                else:
+                    fill(x, dim - 1, temp_index)
+
+        fill(x, DIM)
+
+        return x.reshape(pow(N, DIM), DIM)
+
+    def magnetization(self, cfg: NDArray[np.int8]):
+        return cfg.mean()
+
+    def generate_sample(
+        self, sample_count: int, start_cfg: typing.Optional[NDArray[np.int8]] = None
+    ) -> NDArray[np.int8]:
+        """
+
+        Generate a sample of Spin Configurations according to the Markov-Chain Monte Carlo method.
+        For each sweep visit all lattice sites at random order and propose flipping the
+        spin there, accepting or rejecting as it goes
+
+        :param int sample_count: number of samples to generate.
+
+        :return NDArray[np.int8]: Sample of randomized spin configurations
+
+        """
+
+        if start_cfg is None:
+            start_cfg = self.generate_cfg()
+
+        indexing = self.generate_indexing()
+        sample = np.zeros(shape=(sample_count, *([self.N] * self.DIM)), dtype=np.int8)
+
+        current_cfg = start_cfg
+
+        for step in range(sample_count):
+            for X in np.random.permutation(indexing):
+                A = min(1, np.exp(-self.action_change(current_cfg, X)))
+                if A >= np.random.uniform(0, 1):
+                    # Accept the flip
+                    current_cfg[*X] *= -1
+                sample[step] = current_cfg
+
+        return sample
 
 
 class Ising1D(SpinSystem):
@@ -43,11 +115,20 @@ class Ising1D(SpinSystem):
         self.lattice_sites = lattice_sites
         self.j = j
         self.h = h
-        self.shape = (1, lattice_sites)
+        self.DIM = 1
+        self.N = self.lattice_sites
+        super().__init__()
 
     def action_change(self, cfg: NDArray[np.int8], x: int) -> float:
-        return 1
+        spin = cfg[x]
+        left = cfg[(x - 1) % self.N]
+        right = cfg[(x + 1) % self.N]
+
+        return 2 * spin * (self.h + self.j * (left + right))
 
 
-model = Ising1D(5, 1, 1)
-print(model.generate_cfg())
+np.random.seed(0)
+model = Ising1D(10, 1, 1)
+
+sample = model.generate_sample(50)
+print(sample)
