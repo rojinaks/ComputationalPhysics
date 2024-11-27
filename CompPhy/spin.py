@@ -54,7 +54,7 @@ class SpinSystem(abc.ABC):
         return np.ones(self.shape, dtype=np.int8) * (-1)
 
     def generate_indexing(self) -> NDArray[np.int64]:
-        """Generate an array if the indices of all lattice sites."""
+        """Generate an array of the indices of all lattice sites."""
 
         DIM = self.DIM
         N = self.N
@@ -75,6 +75,11 @@ class SpinSystem(abc.ABC):
 
     def magnetization(self, cfg: NDArray[np.int8]):
         return cfg.mean()
+
+    @abc.abstractmethod
+    def hamiltonian(self, cfg: NDArray[np.int8]) -> float:
+        """Calculate the hamiltonian for a specific spin configuration."""
+        pass
 
     def generate_sample(
         self, sample_count: int, start_cfg: typing.Optional[NDArray[np.int8]] = None
@@ -105,7 +110,7 @@ class SpinSystem(abc.ABC):
                 if A >= np.random.uniform(0, 1):
                     # Accept the flip
                     current_cfg[*X] *= -1
-                sample[step] = current_cfg
+            sample[step] = current_cfg
 
         return sample
 
@@ -125,10 +130,3 @@ class Ising1D(SpinSystem):
         right = cfg[(x + 1) % self.N]
 
         return 2 * spin * (self.h + self.j * (left + right))
-
-
-np.random.seed(0)
-model = Ising1D(10, 1, 1)
-
-sample = model.generate_sample(50)
-print(sample)
