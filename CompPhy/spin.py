@@ -77,7 +77,7 @@ class SpinSystem(abc.ABC):
         return cfg.mean()
 
     @abc.abstractmethod
-    def hamiltonian(self, cfg: NDArray[np.int8]) -> float:
+    def action(self, cfg: NDArray[np.int8]) -> float:
         """Calculate the hamiltonian for a specific spin configuration."""
         pass
 
@@ -130,3 +130,55 @@ class Ising1D(SpinSystem):
         right = cfg[(x + 1) % self.N]
 
         return 2 * spin * (self.h + self.j * (left + right))
+
+    def action(self, cfg):
+        # return super().hamiltonian(cfg)
+        raise NotImplementedError()
+
+
+class Ising2D(SpinSystem):
+    def __init__(self, lattice_sites: int, j: float, h: float):
+        self.lattice_sites = lattice_sites
+        self.j = j
+        self.h = h
+        if self.h != 0:
+            raise NotImplementedError()
+        self.DIM = 2
+        self.N = self.lattice_sites
+        super().__init__()
+
+    def action_change(self, cfg: NDArray[np.int8], X: typing.Sequence[int]) -> float:
+        N = self.N
+        x, y = X
+
+        neighbours = cfg[(x + 1) % N, y] + cfg[(x - 1) % N, y] + cfg[x, (y + 1) % N] + cfg[x, (y - 1) % N]
+
+        return 2 * self.j * cfg[x, y] * neighbours
+
+    def calc_h(self, cfg: NDArray[np.int8]) -> NDArray[np.float64] | np.float64:
+        """
+
+        Calculate the Term
+        H = - J Σ σ_x σ_y
+
+        :param NDArray[np.int8] config: Spin Configuration
+
+        """
+
+        # Make Case for one config or multiple configs
+        if cfg.ndim == 2:
+            term1 = (cfg * np.roll(cfg, shift=1, axis=0)).sum()
+            term2 = (cfg * np.roll(cfg, shift=1, axis=1)).sum()
+
+            return -self.j * (term1 + term2)
+
+        elif cfg.ndim == 3:
+            term1 = (cfg * np.roll(cfg, shift=1, axis=1)).sum(axis=(1, 2))
+            term2 = (cfg * np.roll(cfg, shift=1, axis=2)).sum(axis=(1, 2))
+
+            return -self.j * (term1 + term2)
+        else:
+            raise TypeError("Wrong dimension for cfg")
+
+    def action(self, cfg):
+        raise NotImplementedError
