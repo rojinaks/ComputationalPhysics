@@ -17,7 +17,7 @@ def normalized_autocorrelation(time_series: np.ndarray, mean: float | None = Non
     return C / C[0]
 
 
-def integrated_autocorrelation(time_series: np.ndarray, mean: float | None = None):
+def integrated_autocorrelation(time_series: np.ndarray, mean: float | None = None) -> int:
     # until sign flip
 
     # for i in range(2, len(correlation)):
@@ -32,7 +32,7 @@ def integrated_autocorrelation(time_series: np.ndarray, mean: float | None = Non
 
     try:
         first_zero = np.where(C <= 0)[0][0]
-        return 0.5 + C[1:first_zero].sum()
+        return int(np.ceil(0.5 + C[1:first_zero].sum()))
     except:
         return len(C)  # at least!
 

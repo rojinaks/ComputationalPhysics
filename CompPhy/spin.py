@@ -155,7 +155,7 @@ class Ising2D(SpinSystem):
 
         return 2 * self.j * cfg[x, y] * neighbours
 
-    def calc_h(self, cfg: NDArray[np.int8]) -> NDArray[np.float64] | np.float64:
+    def calc_energy(self, cfg: NDArray[np.int8]) -> NDArray[np.float64] | np.float64:
         """
 
         Calculate the Term
