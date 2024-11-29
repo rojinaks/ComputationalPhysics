@@ -56,14 +56,15 @@ def blocking(time_series: np.ndarray, mean: float | None = None, tau: float | No
     return blocked
 
 
-def mean_spin_spin_correlation(cfgs: NDArray[np.int8]) -> NDArray[np.int8]:
+def mean_spin_spin_correlation(cfgs: NDArray[np.int8]) -> NDArray[np.float64]:
     """
 
-    Calculate the mean of the spin-spin two-point correlation function using the fast 
-    fourier transform algorithm
+    Calculate the spin-spin two-point correlation function using the fast
+    fourier transform algorithm for a set of spin configurations
 
     """
-    return np.fft.ifft2(np.fft.fft2(cfgs) * np.fft.ifft2(cfgs)).real.mean(axis=0)
+
+    return np.fft.ifft2(np.fft.fft2(cfgs, axes=(1, 2)) * np.fft.ifft2(cfgs, axes=(1, 2)), axes=(1, 2)).real
 
 
 __all__ = ["normalized_autocorrelation", "integrated_autocorrelation", "blocking", "mean_spin_spin_correlation"]
